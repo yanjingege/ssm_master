@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oracle.web.mapper.MonsterMapper">
+  <resultMap id="BaseResultMap" type="com.oralce.web.bean.Monster">
+    <id column="MONSTER_ID" jdbcType="INTEGER" property="monsterId" />
+    <result column="MONSTERNAME" jdbcType="VARCHAR" property="monstername" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="BIRTHDAY" jdbcType="TIMESTAMP" property="birthday" />
+    <result column="ENTRYDAY" jdbcType="TIMESTAMP" property="entryday" />
+    <result column="SCHOOL_FK" jdbcType="INTEGER" property="schoolFk" />
+  </resultMap>
+  
+   <resultMap id="mon" type="subMonster">
+    <id column="MONSTER_ID" jdbcType="INTEGER" property="monsterId" />
+    <result column="MONSTERNAME" jdbcType="VARCHAR" property="monstername" />
+    <result column="EMAIL" jdbcType="VARCHAR" property="email" />
+    <result column="BIRTHDAY" jdbcType="TIMESTAMP" property="birthday" />
+    <result column="ENTRYDAY" jdbcType="TIMESTAMP" property="entryday" />
+    <association property="school" javaType="School" column="SCHOOL_FK" select="com.oracle.web.mapper.SchoolMapper.selectByPrimaryKey"> 
+     
+    </association> 
+  </resultMap>
+  <select id="selectAll" resultMap="mon">
+   select MONSTER_ID, MONSTERNAME, EMAIL, BIRTHDAY, ENTRYDAY, SCHOOL_FK
+    from monster
+ 
+ </select>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="mon">
+    select MONSTER_ID, MONSTERNAME, EMAIL, BIRTHDAY, ENTRYDAY, SCHOOL_FK
+    from monster
+    where MONSTER_ID = #{monsterId,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from monster
+    where MONSTER_ID = #{monsterId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.oralce.web.bean.Monster">
+    insert into monster (MONSTER_ID, MONSTERNAME, EMAIL, 
+      BIRTHDAY, ENTRYDAY, SCHOOL_FK
+      )
+    values (#{monsterId,jdbcType=INTEGER}, #{monstername,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, 
+      #{birthday,jdbcType=TIMESTAMP}, #{entryday,jdbcType=TIMESTAMP}, #{schoolFk,jdbcType=INTEGER}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.oralce.web.bean.Monster">
+    update monster
+    set MONSTERNAME = #{monstername,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      BIRTHDAY = #{birthday,jdbcType=TIMESTAMP},
+      ENTRYDAY = #{entryday,jdbcType=TIMESTAMP},
+      SCHOOL_FK = #{schoolFk,jdbcType=INTEGER}
+    where MONSTER_ID = #{monsterId,jdbcType=INTEGER}
+  </update>
+  
+  <select id="selectCount" resultType="java.lang.Integer">
+  	SELECT COUNT(*) FROM monster
+  </select>
+  
+  <select id="selectBypage" parameterType="int"  resultMap="mon">
+  	select * from monster,school where monster.school_fk=school.school_id
+  	order by monster_id  desc limit #{index},3
+  </select>
+  
+  
+  
+  <select id="selectAllByPageHelper" resultMap="mon">
+  	select * from monster,school where monster.school_fk=school.school_id
+  	order by monster_id  desc
+  </select>
+  
+ 
+</mapper>
+

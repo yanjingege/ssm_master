@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.oracle.web.mapper.AdminMapper">
+  <resultMap id="BaseResultMap" type="com.oralce.web.bean.Admin">
+    <id column="ADMIN_ID" jdbcType="INTEGER" property="adminId" />
+    <result column="USERNAME" jdbcType="VARCHAR" property="username" />
+    <result column="PASSWORD" jdbcType="VARCHAR" property="password" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from admin
+    where ADMIN_ID = #{adminId,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.oralce.web.bean.Admin">
+    insert into admin (ADMIN_ID, USERNAME, PASSWORD
+      )
+    values (#{adminId,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="com.oralce.web.bean.Admin">
+    update admin
+    set USERNAME = #{username,jdbcType=VARCHAR},
+      PASSWORD = #{password,jdbcType=VARCHAR}
+    where ADMIN_ID = #{adminId,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select ADMIN_ID, USERNAME, PASSWORD
+    from admin
+    where   USERNAME = #{username,jdbcType=VARCHAR}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select ADMIN_ID, USERNAME, PASSWORD
+    from admin
+  </select>
+  
+  <select id="selectone" parameterType="java.lang.String" resultMap="BaseResultMap">
+    select ADMIN_ID, USERNAME, PASSWORD
+    from admin
+    where   USERNAME = #{username,jdbcType=VARCHAR}
+  </select>
+</mapper>
